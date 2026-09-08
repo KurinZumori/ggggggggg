@@ -98,7 +98,7 @@ async def trigger_webhook(client, user_id_str, quest_name):
         if user:
             embed = discord.Embed(
                 title="🎉 Hoàn Thành Quest Thành Công!",
-                description="Hệ thống đã tự động cày xong nhiệm vụ Discord cho tài khoản của bạn.",
+                description="AUTO 0R3 đã làm xong nhiệm vụ Discord cho tài khoản của bạn.",
                 color=discord.Color.purple()
             )
             embed.add_field(name="🔹 Tên Quest", value=f"`{quest_name}`", inline=False)
@@ -280,7 +280,7 @@ class MultiAccountBot(discord.Client):
 bot = MultiAccountBot()
 
 # --- WEB PANEL VỚI GIAO DIỆN LOGIN RIÊNG ---
-app = FastAPI(title="Auto Quest - Neon Cyber Admin")
+app = FastAPI(title="AUTO 0R3")
 
 def verify_session(session_token: str = Cookie(None)):
     if not session_token or session_token not in ACTIVE_SESSIONS:
@@ -395,7 +395,7 @@ DASHBOARD_HTML = """
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Auto Quest - Neon Cyber Admin</title>
+    <title>AUTO 0R3</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <style>
@@ -510,26 +510,26 @@ DASHBOARD_HTML = """
 <body>
     <div class="container py-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="fw-bold neon-title mb-0">⚡ CYBER ADMIN PANEL ⚡</h2>
-            <a href="/logout" class="btn btn-danger-neon px-3 py-1 font-orbitron" style="font-size: 0.8rem;">ĐĂNG XUẤT</a>
+            <h2 class="fw-bold neon-title mb-0">AUTO 0R3 SYSTEM</h2>
+            <a href="/logout" class="btn btn-danger-neon px-3 py-1 font-orbitron" style="font-size: 0.8rem;">LOG OUT</a>
         </div>
         
         <div class="row text-center mb-4 g-4">
             <div class="col-md-4">
                 <div class="glass-card p-4">
-                    <p class="text-uppercase text-muted mb-1 font-orbitron" style="font-size: 0.8rem;">Tổng số Key</p>
+                    <p class="text-uppercase text-muted mb-1 font-orbitron" style="font-size: 0.8rem;">ALL KEY</p>
                     <h2 class="stat-num-blue fw-bold mb-0">{total_keys}</h2>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="glass-card p-4">
-                    <p class="text-uppercase text-muted mb-1 font-orbitron" style="font-size: 0.8rem;">Key đã sử dụng</p>
+                    <p class="text-uppercase text-muted mb-1 font-orbitron" style="font-size: 0.8rem;">KEY REDEEM</p>
                     <h2 class="stat-num-green fw-bold mb-0">{used_keys}</h2>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="glass-card p-4">
-                    <p class="text-uppercase text-muted mb-1 font-orbitron" style="font-size: 0.8rem;">Tài khoản đang treo</p>
+                    <p class="text-uppercase text-muted mb-1 font-orbitron" style="font-size: 0.8rem;">ACCOUNT</p>
                     <h2 class="stat-num-pink fw-bold mb-0">{active_accounts}</h2>
                 </div>
             </div>
@@ -537,38 +537,38 @@ DASHBOARD_HTML = """
 
         <ul class="nav nav-tabs" id="adminTab" role="tablist">
             <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="keys-tab" data-bs-toggle="tab" data-bs-target="#keys-content" type="button" role="tab">🔑 Quản Lý Key Bản Quyền</button>
+                <button class="nav-link active" id="keys-tab" data-bs-toggle="tab" data-bs-target="#keys-content" type="button" role="tab">🔑 KEY SYSTEM 🔑</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="accounts-tab" data-bs-toggle="tab" data-bs-target="#accounts-content" type="button" role="tab">⚡ Tài Khoản Đang Treo Ngầm</button>
+                <button class="nav-link" id="accounts-tab" data-bs-toggle="tab" data-bs-target="#accounts-content" type="button" role="tab">⚡ ACCOUNT SYSTEM ⚡️</button>
             </li>
         </ul>
 
         <div class="tab-content" id="adminTabContent">
             <div class="tab-pane fade show active" id="keys-content" role="tabpanel">
                 <div class="glass-card p-4 mb-4">
-                    <h4 class="mb-3 font-orbitron text-white" style="font-size: 1.1rem;">Khởi Tạo Key Mới</h4>
+                    <h4 class="mb-3 font-orbitron text-white" style="font-size: 1.1rem;">NEW KEY</h4>
                     <form action="/create-key" method="post" class="row g-3 align-items-center">
                         <div class="col-auto flex-grow-1">
-                            <input type="text" name="duration" class="form-control" placeholder="Nhập thời gian (VD: 2h, 7d, 1m)" required>
+                            <input type="text" name="duration" class="form-control" placeholder="TIME (VD: 2h, 7d, 1m)" required>
                         </div>
                         <div class="col-auto">
-                            <button type="submit" class="btn btn-neon px-4 py-2">TẠO KEY</button>
+                            <button type="submit" class="btn btn-neon px-4 py-2">CREATE KEY</button>
                         </div>
                     </form>
                 </div>
 
                 <div class="glass-card p-4">
-                    <h4 class="mb-3 font-orbitron text-white" style="font-size: 1.1rem;">Danh Sách Toàn Bộ Key ({total_keys})</h4>
+                    <h4 class="mb-3 font-orbitron text-white" style="font-size: 1.1rem;">KEY LIST ({total_keys})</h4>
                     <div class="table-responsive scrollable-table">
                         <table class="table align-middle mb-0">
                             <thead>
                                 <tr class="font-orbitron" style="font-size: 0.85rem; color: #00f3ff; position: sticky; top: 0; background: #0f0f19; z-index: 1;">
-                                    <th>MÃ KEY</th>
-                                    <th>TRẠNG THÁI</th>
+                                    <th>KEY</th>
+                                    <th>STATUS</th>
                                     <th>DISCORD USER ID</th>
-                                    <th>THỜI HẠN</th>
-                                    <th>THAO TÁC</th>
+                                    <th>TIME</th>
+                                    <th>OPERATION</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -581,15 +581,15 @@ DASHBOARD_HTML = """
 
             <div class="tab-pane fade" id="accounts-content" role="tabpanel">
                 <div class="glass-card p-4">
-                    <h4 class="mb-3 font-orbitron text-white" style="font-size: 1.1rem;">Danh Sách Tài Khoản Đang Hoạt Động ({active_accounts})</h4>
+                    <h4 class="mb-3 font-orbitron text-white" style="font-size: 1.1rem;">ACCOUNT LIST ({active_accounts})</h4>
                     <div class="table-responsive scrollable-table">
                         <table class="table align-middle mb-0">
                             <thead>
                                 <tr class="font-orbitron" style="font-size: 0.85rem; color: #ff0055; position: sticky; top: 0; background: #0f0f19; z-index: 1;">
                                     <th>DISCORD USER ID</th>
-                                    <th>KEY SỬ DỤNG</th>
-                                    <th>THỜI GIAN HẾT HẠN</th>
-                                    <th>THAO TÁC</th>
+                                    <th>KEY</th>
+                                    <th>TIME</th>
+                                    <th>OPERATION</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -743,7 +743,7 @@ class ActiveModal(discord.ui.Modal, title="Kích Hoạt Auto Quest Đa Tài Kho�
     async def on_submit(self, interaction: discord.Interaction):
         loading_embed = discord.Embed(
             title="🔄 Đang Kết Nối Hệ Thống...",
-            description="Hệ thống đang xác thực mã key và kiểm tra kết nối tài khoản Discord của bạn, vui lòng đợi trong giây lát...",
+            description="Hệ thống đang kiểm tra KEY🔑 và kết nối tài khoản Discord của bạn, vui lòng đợi...",
             color=discord.Color.gold()
         )
         await interaction.response.send_message(embed=loading_embed, ephemeral=True)
@@ -793,12 +793,12 @@ class ActiveModal(discord.ui.Modal, title="Kích Hoạt Auto Quest Đa Tài Kho�
 
         success_embed = discord.Embed(
             title="🎉 Kích Hoạt Thành Công!",
-            description="Hệ thống đã tiếp nhận tài khoản và bắt đầu quy trình treo ngầm tự động.",
+            description="AUTO 0R3 đã được chạy",
             color=discord.Color.brand_green()
         )
         success_embed.add_field(name="📦 Mã Key Sử Dụng", value=f"`{entered_key}`", inline=True)
         success_embed.add_field(name="⏳ Thời Gian Hết Hạn", value=f"<t:{int(expires_at_dt.timestamp())}:R>", inline=True)
-        success_embed.set_footer(text="Bot đang chạy ngầm 24/7 • Bạn có thể tắt ứng dụng Discord")
+        success_embed.set_footer(text="Bot đang chạy 24/7 • Bạn có thể tắt ứng dụng Discord")
         
         await interaction.edit_original_response(embed=success_embed)
 
@@ -819,8 +819,8 @@ class UpdateTokenModal(discord.ui.Modal, title="Cập Nhật Lại Token Mới")
 
     async def on_submit(self, interaction: discord.Interaction):
         loading_embed = discord.Embed(
-            title="🔄 Đang Xác Thực Token...",
-            description="Hệ thống đang kiểm tra chữ ký token mới và đối chiếu bảo mật tài khoản...",
+            title="🔄 Đang Xác Thực TOKEN...",
+            description="Hệ thống đang kiểm tra TOKEN mới và đối chiếu bảo mật tài khoản...",
             color=discord.Color.gold()
         )
         await interaction.response.send_message(embed=loading_embed, ephemeral=True)
@@ -832,7 +832,7 @@ class UpdateTokenModal(discord.ui.Modal, title="Cập Nhật Lại Token Mới")
             headers = {"Authorization": new_token}
             async with session.get("https://discord.com/api/v9/users/@me", headers=headers) as res:
                 if res.status != 200:
-                    err_embed = discord.Embed(title="❌ Cập Nhật Thất Bại", description="Token mới không hợp lệ hoặc đã chết. Vui lòng kiểm tra lại!", color=discord.Color.red())
+                    err_embed = discord.Embed(title="❌ Cập Nhật Thất Bại", description="TOKEN mới không hợp lệ. Vui lòng kiểm tra lại!", color=discord.Color.red())
                     await interaction.edit_original_response(embed=err_embed)
                     return
                 user_data = await res.json()
@@ -855,7 +855,7 @@ class UpdateTokenModal(discord.ui.Modal, title="Cập Nhật Lại Token Mới")
 
         original_discord_id = acc_info.get("original_discord_id", new_discord_id)
         if acc_info.get("original_discord_id") and new_discord_id != original_discord_id:
-            err_embed = discord.Embed(title="🛡️ Cảnh Báo Bảo Mật", description="Bạn chỉ được phép cập nhật token cho **đúng tài khoản Discord** đã kích hoạt ban đầu!", color=discord.Color.red())
+            err_embed = discord.Embed(title="🛡️ Cảnh Báo Bảo Mật", description="Bạn chỉ được phép cập nhật TOKEN cho **đúng tài khoản Discord** đã kích hoạt ban đầu!", color=discord.Color.red())
             await interaction.edit_original_response(embed=err_embed)
             return
 
@@ -869,7 +869,7 @@ class UpdateTokenModal(discord.ui.Modal, title="Cập Nhật Lại Token Mới")
         save_json(ACCOUNTS_FILE, accounts_data)
 
         success_embed = discord.Embed(
-            title="✅ Cập Nhật Token Thành Công!",
+            title="✅ Cập Nhật TOKEN Thành Công!",
             description="Tài khoản của bạn đã được làm mới kết nối và tiếp tục chạy tiến trình cày quest.",
             color=discord.Color.brand_green()
         )
@@ -924,7 +924,7 @@ async def genkey(interaction: discord.Interaction, duration: str):
     embed.add_field(name="Thời hạn:", value=f"`{duration}`", inline=False)
     await interaction.response.send_message(embed=embed, ephemeral=True)
 
-@bot.tree.command(name="active", description="Kích hoạt Auto Quest bằng Key và Token")
+@bot.tree.command(name="active", description="Kích hoạt AUTO 0R3 bằng Key và Token")
 async def active(interaction: discord.Interaction):
     await interaction.response.send_modal(ActiveModal())
 
