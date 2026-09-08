@@ -382,7 +382,7 @@ LOGIN_HTML = """
                 <label class="form-label text-muted font-orbitron" style="font-size: 0.75rem;">PASSWORD</label>
                 <input type="password" name="password" class="form-control" placeholder="" required>
             </div>
-            <button type="submit" class="btn btn-neon">TRUY CẬP HỆ THỐNG</button>
+            <button type="submit" class="btn btn-neon">LOGIN</button>
             {error_block}
         </form>
     </div>
