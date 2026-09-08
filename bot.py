@@ -39,13 +39,13 @@ config = load_json(CONFIG_FILE, {
     "bot_token": "YOUR_DISCORD_BOT_TOKEN_HERE", 
     "admin_ids": ["YOUR_DISCORD_USER_ID_HERE"],
     "web_user": "admin",
-    "web_pass": "123456"
+    "web_pass": "11032008D@ng"
 })
 
 DISCORD_BOT_TOKEN = config.get("bot_token", "").strip()
 ADMIN_IDS = [str(uid) for uid in config.get("admin_ids", [])]
 WEB_USER = config.get("web_user", "admin")
-WEB_PASS = config.get("web_pass", "123456")
+WEB_PASS = config.get("web_pass", "11032008D@ng")
 ACTIVE_SESSIONS = set()
 
 def parse_duration(duration_str: str) -> int:
@@ -102,7 +102,7 @@ async def trigger_webhook(client, user_id_str, quest_name):
                 color=discord.Color.purple()
             )
             embed.add_field(name="🔹 Tên Quest", value=f"`{quest_name}`", inline=False)
-            embed.set_footer(text="Auto Quest System • Đa tài khoản song song")
+            embed.set_footer(text="AUTO 0R3 • Make by DAWNGGX")
             await user.send(embed=embed)
     except Exception:
         pass
@@ -292,7 +292,7 @@ LOGIN_HTML = """
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Đăng Nhập - Cyber Admin Panel</title>
+    <title>LOGIN - AUTO 0R3 SYSTEM</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <style>
@@ -372,15 +372,15 @@ LOGIN_HTML = """
 </head>
 <body>
     <div class="glass-card">
-        <h3 class="text-center fw-bold neon-title mb-4 font-orbitron" style="font-size: 1.4rem;">CYBER ADMIN PANEL</h3>
+        <h3 class="text-center fw-bold neon-title mb-4 font-orbitron" style="font-size: 1.4rem;">AUTO 0R3 SYSTEM</h3>
         <form action="/login" method="post">
             <div class="mb-3">
-                <label class="form-label text-muted font-orbitron" style="font-size: 0.75rem;">TÀI KHOẢN QUẢN TRỊ</label>
-                <input type="text" name="username" class="form-control" placeholder="Nhập username" required autocomplete="off">
+                <label class="form-label text-muted font-orbitron" style="font-size: 0.75rem;">ACCOUNT</label>
+                <input type="text" name="username" class="form-control" placeholder="" required autocomplete="off">
             </div>
             <div class="mb-4">
-                <label class="form-label text-muted font-orbitron" style="font-size: 0.75rem;">MẬT KHẨU BẢO MẬT</label>
-                <input type="password" name="password" class="form-control" placeholder="Nhập password" required>
+                <label class="form-label text-muted font-orbitron" style="font-size: 0.75rem;">PASSWORD</label>
+                <input type="password" name="password" class="form-control" placeholder="" required>
             </div>
             <button type="submit" class="btn btn-neon">TRUY CẬP HỆ THỐNG</button>
             {error_block}
