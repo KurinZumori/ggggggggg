@@ -307,7 +307,6 @@ class MultiAccountBot(discord.Client):
 
 bot = MultiAccountBot()
 
-# --- WEB PANEL VỚI GIAO DIỆN LOGIN RIÊNG ---
 app = FastAPI(title="AUTO 0R3")
 
 def verify_session(session_token: str = Cookie(None)):
@@ -324,7 +323,7 @@ LOGIN_HTML = """
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        body {
+        body {{
             background-color: #05050a;
             color: #e0e0e0;
             font-family: 'Rajdhani', sans-serif;
@@ -334,8 +333,8 @@ LOGIN_HTML = """
             justify-content: center;
             overflow: hidden;
             position: relative;
-        }
-        body::before {
+        }}
+        body::before {{
             content: " ";
             display: block;
             position: absolute;
@@ -344,10 +343,10 @@ LOGIN_HTML = """
             z-index: -1;
             background-size: 100% 4px, 6px 100%;
             pointer-events: none;
-        }
-        .font-orbitron { font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
-        .neon-title { color: #00f3ff; text-shadow: 0 0 10px rgba(0, 243, 255, 0.6), 0 0 20px rgba(0, 243, 255, 0.3); }
-        .glass-card {
+        }}
+        .font-orbitron {{ font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }}
+        .neon-title {{ color: #00f3ff; text-shadow: 0 0 10px rgba(0, 243, 255, 0.6), 0 0 20px rgba(0, 243, 255, 0.3); }}
+        .glass-card {{
             background: rgba(15, 15, 25, 0.85);
             backdrop-filter: blur(15px);
             border: 1px solid rgba(0, 243, 255, 0.3);
@@ -356,22 +355,22 @@ LOGIN_HTML = """
             width: 100%;
             max-width: 420px;
             padding: 40px;
-        }
-        .form-control {
+        }}
+        .form-control {{
             background: rgba(10, 10, 18, 0.9);
             border: 1px solid rgba(0, 243, 255, 0.3);
             color: #fff;
             border-radius: 8px;
             padding: 12px;
             transition: all 0.3s;
-        }
-        .form-control:focus {
+        }}
+        .form-control:focus {{
             background: rgba(15, 15, 25, 1);
             color: #fff;
             border-color: #00f3ff;
             box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
-        }
-        .btn-neon {
+        }}
+        .btn-neon {{
             background: transparent;
             color: #00f3ff;
             border: 1px solid #00f3ff;
@@ -382,20 +381,20 @@ LOGIN_HTML = """
             width: 100%;
             transition: all 0.3s ease;
             box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
-        }
-        .btn-neon:hover {
+        }}
+        .btn-neon:hover {{
             background: #00f3ff;
             color: #05050a;
             box-shadow: 0 0 25px rgba(0, 243, 255, 0.8);
             transform: scale(1.02);
-        }
-        .error-msg {
+        }}
+        .error-msg {{
             color: #ff0055;
             font-size: 0.9rem;
             text-align: center;
             margin-top: 15px;
             text-shadow: 0 0 8px rgba(255, 0, 85, 0.4);
-        }
+        }}
     </style>
 </head>
 <body>
@@ -427,14 +426,14 @@ DASHBOARD_HTML = """
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        body {
+        body {{
             background-color: #05050a;
             color: #e0e0e0;
             font-family: 'Rajdhani', sans-serif;
             overflow-x: hidden;
             position: relative;
-        }
-        body::before {
+        }}
+        body::before {{
             content: " ";
             display: block;
             position: absolute;
@@ -443,39 +442,39 @@ DASHBOARD_HTML = """
             z-index: -1;
             background-size: 100% 4px, 6px 100%;
             pointer-events: none;
-        }
-        h1, h2, h3, h4, .font-orbitron { font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
-        .neon-title { color: #00f3ff; text-shadow: 0 0 10px rgba(0, 243, 255, 0.6), 0 0 20px rgba(0, 243, 255, 0.3); }
-        .glass-card {
+        }}
+        h1, h2, h3, h4, .font-orbitron {{ font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }}
+        .neon-title {{ color: #00f3ff; text-shadow: 0 0 10px rgba(0, 243, 255, 0.6), 0 0 20px rgba(0, 243, 255, 0.3); }}
+        .glass-card {{
             background: rgba(15, 15, 25, 0.7);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(0, 243, 255, 0.2);
             border-radius: 12px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
             transition: all 0.3s ease;
-        }
-        .glass-card:hover {
+        }}
+        .glass-card:hover {{
             border-color: rgba(0, 243, 255, 0.6);
             box-shadow: 0 0 25px rgba(0, 243, 255, 0.2);
             transform: translateY(-2px);
-        }
-        .stat-num-blue { color: #00f3ff; text-shadow: 0 0 8px rgba(0, 243, 255, 0.5); }
-        .stat-num-green { color: #0ff0fc; text-shadow: 0 0 8px rgba(15, 240, 252, 0.5); }
-        .stat-num-pink { color: #ff0055; text-shadow: 0 0 8px rgba(255, 0, 85, 0.5); }
-        .form-control {
+        }}
+        .stat-num-blue {{ color: #00f3ff; text-shadow: 0 0 8px rgba(0, 243, 255, 0.5); }}
+        .stat-num-green {{ color: #0ff0fc; text-shadow: 0 0 8px rgba(15, 240, 252, 0.5); }}
+        .stat-num-pink {{ color: #ff0055; text-shadow: 0 0 8px rgba(255, 0, 85, 0.5); }}
+        .form-control {{
             background: rgba(10, 10, 18, 0.8);
             border: 1px solid rgba(0, 243, 255, 0.3);
             color: #fff;
             border-radius: 8px;
             transition: all 0.3s;
-        }
-        .form-control:focus {
+        }}
+        .form-control:focus {{
             background: rgba(15, 15, 25, 0.9);
             color: #fff;
             border-color: #00f3ff;
             box-shadow: 0 0 10px rgba(0, 243, 255, 0.4);
-        }
-        .btn-neon {
+        }}
+        .btn-neon {{
             background: transparent;
             color: #00f3ff;
             border: 1px solid #00f3ff;
@@ -484,28 +483,28 @@ DASHBOARD_HTML = """
             font-weight: bold;
             transition: all 0.3s ease;
             box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
-        }
-        .btn-neon:hover {
+        }}
+        .btn-neon:hover {{
             background: #00f3ff;
             color: #05050a;
             box-shadow: 0 0 20px rgba(0, 243, 255, 0.8);
             transform: scale(1.02);
-        }
-        .btn-danger-neon {
+        }}
+        .btn-danger-neon {{
             background: transparent;
             color: #ff0055;
             border: 1px solid #ff0055;
             border-radius: 6px;
             transition: all 0.3s ease;
             box-shadow: 0 0 8px rgba(255, 0, 85, 0.2);
-        }
-        .btn-danger-neon:hover {
+        }}
+        .btn-danger-neon:hover {{
             background: #ff0055;
             color: #fff;
             box-shadow: 0 0 15px rgba(255, 0, 85, 0.8);
-        }
-        .nav-tabs { border-bottom: 1px solid rgba(0, 243, 255, 0.2); margin-bottom: 25px; }
-        .nav-tabs .nav-link {
+        }}
+        .nav-tabs {{ border-bottom: 1px solid rgba(0, 243, 255, 0.2); margin-bottom: 25px; }}
+        .nav-tabs .nav-link {{
             background: rgba(15, 15, 25, 0.5);
             color: #a0a0b0;
             border: 1px solid rgba(0, 243, 255, 0.1);
@@ -516,23 +515,23 @@ DASHBOARD_HTML = """
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
             transition: all 0.3s ease;
-        }
-        .nav-tabs .nav-link:hover { color: #00f3ff; border-color: rgba(0, 243, 255, 0.4); }
-        .nav-tabs .nav-link.active {
+        }}
+        .nav-tabs .nav-link:hover {{ color: #00f3ff; border-color: rgba(0, 243, 255, 0.4); }}
+        .nav-tabs .nav-link.active {{
             background: rgba(15, 15, 25, 0.9);
             color: #00f3ff;
             border-color: #00f3ff #00f3ff transparent #00f3ff;
             text-shadow: 0 0 8px rgba(0, 243, 255, 0.4);
-        }
-        .table { color: #d0d0d0; background: transparent; }
-        .table > :not(caption) > * > * {
+        }}
+        .table {{ color: #d0d0d0; background: transparent; }}
+        .table > :not(caption) > * > * {{
             background-color: transparent;
             color: #e0e0e0;
             border-bottom-color: rgba(255, 255, 255, 0.05);
-        }
-        .table-hover tbody tr:hover { background-color: rgba(0, 243, 255, 0.05); }
-        code { color: #ffcc00; background: rgba(255, 204, 0, 0.1); padding: 2px 6px; border-radius: 4px; }
-        .scrollable-table { max-height: 450px; overflow-y: auto; }
+        }}
+        .table-hover tbody tr:hover {{ background-color: rgba(0, 243, 255, 0.05); }}
+        code {{ color: #ffcc00; background: rgba(255, 204, 0, 0.1); padding: 2px 6px; border-radius: 4px; }}
+        .scrollable-table {{ max-height: 450px; overflow-y: auto; }}
     </style>
 </head>
 <body>
@@ -771,7 +770,6 @@ def run_web_server():
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run(app, host="0.0.0.0", port=port, log_level="warning")
 
-# --- BOT EVENTS & COMMANDS ---
 class ActiveModal(discord.ui.Modal, title="Kích Hoạt Auto Quest Đa Tài Khoản"):
     key_input = discord.ui.TextInput(label="Mã Key Bản Quyền", placeholder="Nhập key do Admin cung cấp", required=True, style=discord.TextStyle.short)
     token_input = discord.ui.TextInput(label="Discord User Token", placeholder="Nhập token tài khoản của bạn", required=True, style=discord.TextStyle.long)
