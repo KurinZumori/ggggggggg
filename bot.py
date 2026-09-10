@@ -35,6 +35,13 @@ def save_json(filename, data):
     with open(filename, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4)
 
+# --- HÀM TẠO KEY THEO ĐỊNH DẠNG 0R3-XXXX-XXXX-XXXX ---
+def generate_custom_key():
+    part1 = ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))
+    part2 = ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))
+    part3 = ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))
+    return f"0R3-{part1}-{part2}-{part3}"
+
 config = load_json(CONFIG_FILE, {
     "bot_token": "YOUR_DISCORD_BOT_TOKEN_HERE", 
     "admin_ids": ["YOUR_DISCORD_USER_ID_HERE"],
@@ -296,7 +303,7 @@ LOGIN_HTML = """
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        body {{
+        body {
             background-color: #05050a;
             color: #e0e0e0;
             font-family: 'Rajdhani', sans-serif;
@@ -306,8 +313,8 @@ LOGIN_HTML = """
             justify-content: center;
             overflow: hidden;
             position: relative;
-        }}
-        body::before {{
+        }
+        body::before {
             content: " ";
             display: block;
             position: absolute;
@@ -316,10 +323,10 @@ LOGIN_HTML = """
             z-index: -1;
             background-size: 100% 4px, 6px 100%;
             pointer-events: none;
-        }}
-        .font-orbitron {{ font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }}
-        .neon-title {{ color: #00f3ff; text-shadow: 0 0 10px rgba(0, 243, 255, 0.6), 0 0 20px rgba(0, 243, 255, 0.3); }}
-        .glass-card {{
+        }
+        .font-orbitron { font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
+        .neon-title { color: #00f3ff; text-shadow: 0 0 10px rgba(0, 243, 255, 0.6), 0 0 20px rgba(0, 243, 255, 0.3); }
+        .glass-card {
             background: rgba(15, 15, 25, 0.85);
             backdrop-filter: blur(15px);
             border: 1px solid rgba(0, 243, 255, 0.3);
@@ -328,22 +335,22 @@ LOGIN_HTML = """
             width: 100%;
             max-width: 420px;
             padding: 40px;
-        }}
-        .form-control {{
+        }
+        .form-control {
             background: rgba(10, 10, 18, 0.9);
             border: 1px solid rgba(0, 243, 255, 0.3);
             color: #fff;
             border-radius: 8px;
             padding: 12px;
             transition: all 0.3s;
-        }}
-        .form-control:focus {{
+        }
+        .form-control:focus {
             background: rgba(15, 15, 25, 1);
             color: #fff;
             border-color: #00f3ff;
             box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
-        }}
-        .btn-neon {{
+        }
+        .btn-neon {
             background: transparent;
             color: #00f3ff;
             border: 1px solid #00f3ff;
@@ -354,20 +361,20 @@ LOGIN_HTML = """
             width: 100%;
             transition: all 0.3s ease;
             box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
-        }}
-        .btn-neon:hover {{
+        }
+        .btn-neon:hover {
             background: #00f3ff;
             color: #05050a;
             box-shadow: 0 0 25px rgba(0, 243, 255, 0.8);
             transform: scale(1.02);
-        }}
-        .error-msg {{
+        }
+        .error-msg {
             color: #ff0055;
             font-size: 0.9rem;
             text-align: center;
             margin-top: 15px;
             text-shadow: 0 0 8px rgba(255, 0, 85, 0.4);
-        }}
+        }
     </style>
 </head>
 <body>
@@ -399,14 +406,14 @@ DASHBOARD_HTML = """
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        body {{
+        body {
             background-color: #05050a;
             color: #e0e0e0;
             font-family: 'Rajdhani', sans-serif;
             overflow-x: hidden;
             position: relative;
-        }}
-        body::before {{
+        }
+        body::before {
             content: " ";
             display: block;
             position: absolute;
@@ -415,39 +422,39 @@ DASHBOARD_HTML = """
             z-index: -1;
             background-size: 100% 4px, 6px 100%;
             pointer-events: none;
-        }}
-        h1, h2, h3, h4, .font-orbitron {{ font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }}
-        .neon-title {{ color: #00f3ff; text-shadow: 0 0 10px rgba(0, 243, 255, 0.6), 0 0 20px rgba(0, 243, 255, 0.3); }}
-        .glass-card {{
+        }
+        h1, h2, h3, h4, .font-orbitron { font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
+        .neon-title { color: #00f3ff; text-shadow: 0 0 10px rgba(0, 243, 255, 0.6), 0 0 20px rgba(0, 243, 255, 0.3); }
+        .glass-card {
             background: rgba(15, 15, 25, 0.7);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(0, 243, 255, 0.2);
             border-radius: 12px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
             transition: all 0.3s ease;
-        }}
-        .glass-card:hover {{
+        }
+        .glass-card:hover {
             border-color: rgba(0, 243, 255, 0.6);
             box-shadow: 0 0 25px rgba(0, 243, 255, 0.2);
             transform: translateY(-2px);
-        }}
-        .stat-num-blue {{ color: #00f3ff; text-shadow: 0 0 8px rgba(0, 243, 255, 0.5); }}
-        .stat-num-green {{ color: #0ff0fc; text-shadow: 0 0 8px rgba(15, 240, 252, 0.5); }}
-        .stat-num-pink {{ color: #ff0055; text-shadow: 0 0 8px rgba(255, 0, 85, 0.5); }}
-        .form-control {{
+        }
+        .stat-num-blue { color: #00f3ff; text-shadow: 0 0 8px rgba(0, 243, 255, 0.5); }
+        .stat-num-green { color: #0ff0fc; text-shadow: 0 0 8px rgba(15, 240, 252, 0.5); }
+        .stat-num-pink { color: #ff0055; text-shadow: 0 0 8px rgba(255, 0, 85, 0.5); }
+        .form-control {
             background: rgba(10, 10, 18, 0.8);
             border: 1px solid rgba(0, 243, 255, 0.3);
             color: #fff;
             border-radius: 8px;
             transition: all 0.3s;
-        }}
-        .form-control:focus {{
+        }
+        .form-control:focus {
             background: rgba(15, 15, 25, 0.9);
             color: #fff;
             border-color: #00f3ff;
             box-shadow: 0 0 10px rgba(0, 243, 255, 0.4);
-        }}
-        .btn-neon {{
+        }
+        .btn-neon {
             background: transparent;
             color: #00f3ff;
             border: 1px solid #00f3ff;
@@ -456,28 +463,28 @@ DASHBOARD_HTML = """
             font-weight: bold;
             transition: all 0.3s ease;
             box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
-        }}
-        .btn-neon:hover {{
+        }
+        .btn-neon:hover {
             background: #00f3ff;
             color: #05050a;
             box-shadow: 0 0 20px rgba(0, 243, 255, 0.8);
             transform: scale(1.02);
-        }}
-        .btn-danger-neon {{
+        }
+        .btn-danger-neon {
             background: transparent;
             color: #ff0055;
             border: 1px solid #ff0055;
             border-radius: 6px;
             transition: all 0.3s ease;
             box-shadow: 0 0 8px rgba(255, 0, 85, 0.2);
-        }}
-        .btn-danger-neon:hover {{
+        }
+        .btn-danger-neon:hover {
             background: #ff0055;
             color: #fff;
             box-shadow: 0 0 15px rgba(255, 0, 85, 0.8);
-        }}
-        .nav-tabs {{ border-bottom: 1px solid rgba(0, 243, 255, 0.2); margin-bottom: 25px; }}
-        .nav-tabs .nav-link {{
+        }
+        .nav-tabs { border-bottom: 1px solid rgba(0, 243, 255, 0.2); margin-bottom: 25px; }
+        .nav-tabs .nav-link {
             background: rgba(15, 15, 25, 0.5);
             color: #a0a0b0;
             border: 1px solid rgba(0, 243, 255, 0.1);
@@ -488,23 +495,23 @@ DASHBOARD_HTML = """
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
             transition: all 0.3s ease;
-        }}
-        .nav-tabs .nav-link:hover {{ color: #00f3ff; border-color: rgba(0, 243, 255, 0.4); }}
-        .nav-tabs .nav-link.active {{
+        }
+        .nav-tabs .nav-link:hover { color: #00f3ff; border-color: rgba(0, 243, 255, 0.4); }
+        .nav-tabs .nav-link.active {
             background: rgba(15, 15, 25, 0.9);
             color: #00f3ff;
             border-color: #00f3ff #00f3ff transparent #00f3ff;
             text-shadow: 0 0 8px rgba(0, 243, 255, 0.4);
-        }}
-        .table {{ color: #d0d0d0; background: transparent; }}
-        .table > :not(caption) > * > * {{
+        }
+        .table { color: #d0d0d0; background: transparent; }
+        .table > :not(caption) > * > * {
             background-color: transparent;
             color: #e0e0e0;
             border-bottom-color: rgba(255, 255, 255, 0.05);
-        }}
-        .table-hover tbody tr:hover {{ background-color: rgba(0, 243, 255, 0.05); }}
-        code {{ color: #ffcc00; background: rgba(255, 204, 0, 0.1); padding: 2px 6px; border-radius: 4px; }}
-        .scrollable-table {{ max-height: 450px; overflow-y: auto; }}
+        }
+        .table-hover tbody tr:hover { background-color: rgba(0, 243, 255, 0.05); }
+        code { color: #ffcc00; background: rgba(255, 204, 0, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .scrollable-table { max-height: 450px; overflow-y: auto; }
     </style>
 </head>
 <body>
@@ -549,11 +556,14 @@ DASHBOARD_HTML = """
                 <div class="glass-card p-4 mb-4">
                     <h4 class="mb-3 font-orbitron text-white" style="font-size: 1.1rem;">NEW KEY</h4>
                     <form action="/create-key" method="post" class="row g-3 align-items-center">
-                        <div class="col-auto flex-grow-1">
+                        <div class="col-md-6">
                             <input type="text" name="duration" class="form-control" placeholder="TIME (VD: 2h, 7d, 1m)" required>
                         </div>
-                        <div class="col-auto">
-                            <button type="submit" class="btn btn-neon px-4 py-2">CREATE KEY</button>
+                        <div class="col-md-4">
+                            <input type="number" name="amount" class="form-control" placeholder="SỐ LƯỢNG (Mặc định: 1)" value="1" min="1" max="100" required>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-neon px-4 py-2 w-100">CREATE</button>
                         </div>
                     </form>
                 </div>
@@ -702,12 +712,16 @@ async def admin_dashboard(auth: bool = Depends(verify_session)):
     )
 
 @app.post("/create-key")
-async def web_create_key(duration: str = Form(...), auth: bool = Depends(verify_session)):
+async def web_create_key(duration: str = Form(...), amount: int = Form(1), auth: bool = Depends(verify_session)):
     seconds = parse_duration(duration)
-    if seconds > 0:
-        new_key = f"DAWNGGX-{''.join(random.choices(string.ascii_uppercase + string.digits, k=8))}"
+    if seconds > 0 and amount > 0:
         keys_data = load_json(KEY_FILE, {})
-        keys_data[new_key] = {"used": False, "user_id": None, "duration_seconds": seconds, "expires_at": None}
+        for _ in range(min(amount, 100)): # Giới hạn tối đa 100 key mỗi lần tạo qua web để tránh treo
+            new_key = generate_custom_key()
+            # Đảm bảo không bị trùng lặp key ngẫu nhiên
+            while new_key in keys_data:
+                new_key = generate_custom_key()
+            keys_data[new_key] = {"used": False, "user_id": None, "duration_seconds": seconds, "expires_at": None}
         save_json(KEY_FILE, keys_data)
     return RedirectResponse(url="/", status_code=303)
 
@@ -736,41 +750,42 @@ def run_web_server():
     uvicorn.run(app, host="0.0.0.0", port=8000, log_level="warning")
 
 # --- BOT EVENTS & COMMANDS ---
-class ActiveModal(discord.ui.Modal, title="Kích Hoạt Auto Quest Đa Tài Khoản"):
-    key_input = discord.ui.TextInput(label="Mã Key Bản Quyền", placeholder="Nhập key do Admin cung cấp", required=True, style=discord.TextStyle.short)
-    token_input = discord.ui.TextInput(label="Discord User Token", placeholder="Nhập token tài khoản của bạn", required=True, style=discord.TextStyle.long)
+
+class AddAccountModal(discord.ui.Modal, title="Thêm / Cập Nhật Token Tài Khoản"):
+    token_input = discord.ui.TextInput(
+        label="Discord User Token",
+        placeholder="Dán token tài khoản cần chạy auto quest vào đây",
+        required=True,
+        style=discord.TextStyle.long
+    )
+
+    def __init__(self, key_code: str):
+        super().__init__()
+        self.key_code = key_code
 
     async def on_submit(self, interaction: discord.Interaction):
-        loading_embed = discord.Embed(
-            title="🔄 Đang Kết Nối Hệ Thống...",
-            description="Hệ thống đang kiểm tra KEY🔑 và kết nối tài khoản Discord của bạn, vui lòng đợi...",
-            color=discord.Color.gold()
-        )
-        await interaction.response.send_message(embed=loading_embed, ephemeral=True)
+        await interaction.response.defer(ephemeral=True)
 
-        entered_key = self.key_input.value.strip()
         user_token = self.token_input.value.strip()
+        entered_key = self.key_code.strip()
         keys_data = load_json(KEY_FILE, {})
 
         if entered_key not in keys_data:
-            err_embed = discord.Embed(title="❌ Lỗi Kích Hoạt", description="Mã key không tồn tại trong hệ thống!", color=discord.Color.red())
-            await interaction.edit_original_response(embed=err_embed)
+            await interaction.followup.send("❌ Mã key không tồn tại trong hệ thống!", ephemeral=True)
             return
 
         key_info = keys_data[entered_key]
         now = datetime.now(timezone.utc)
 
         if key_info.get("used", False) and key_info.get("user_id") != str(interaction.user.id):
-            err_embed = discord.Embed(title="❌ Lỗi Kích Hoạt", description="Key này đã được dùng bởi người khác!", color=discord.Color.red())
-            await interaction.edit_original_response(embed=err_embed)
+            await interaction.followup.send("❌ Key này đã được dùng bởi người khác!", ephemeral=True)
             return
 
         async with aiohttp.ClientSession() as session:
             headers = {"Authorization": user_token}
             async with session.get("https://discord.com/api/v9/users/@me", headers=headers) as res:
                 if res.status != 200:
-                    err_embed = discord.Embed(title="❌ Token Không Hợp Lệ", description="Token Discord bạn vừa nhập không thể truy cập được. Vui lòng kiểm tra lại!", color=discord.Color.red())
-                    await interaction.edit_original_response(embed=err_embed)
+                    await interaction.followup.send("❌ Token Discord bạn vừa nhập không hợp lệ hoặc hết hạn!", ephemeral=True)
                     return
                 user_data = await res.json()
                 original_discord_id = str(user_data.get("id"))
@@ -792,96 +807,21 @@ class ActiveModal(discord.ui.Modal, title="Kích Hoạt Auto Quest Đa Tài Kho�
         save_json(ACCOUNTS_FILE, accounts_data)
 
         success_embed = discord.Embed(
-            title="🎉 Kích Hoạt Thành Công!",
-            description="AUTO 0R3 đã được chạy",
+            title="🎉 Kích Hoạt & Thêm Tài Khoản Thành Công!",
+            description="AUTO 0R3 đã bắt đầu chạy tiến trình cày quest ngầm cho tài khoản của bạn.",
             color=discord.Color.brand_green()
         )
-        success_embed.add_field(name="📦 Mã Key Sử Dụng", value=f"`{entered_key}`", inline=True)
+        success_embed.add_field(name="📦 Key Sử Dụng", value=f"`{entered_key}`", inline=True)
         success_embed.add_field(name="⏳ Thời Gian Hết Hạn", value=f"<t:{int(expires_at_dt.timestamp())}:R>", inline=True)
         success_embed.set_footer(text="Bot đang chạy 24/7 • Bạn có thể tắt ứng dụng Discord")
         
-        await interaction.edit_original_response(embed=success_embed)
+        await interaction.followup.send(embed=success_embed, ephemeral=True)
 
         if user_token in bot.running_tasks:
             bot.running_tasks[user_token].cancel()
 
         bot.running_tasks[user_token] = asyncio.create_task(
             run_auto_quest_background(bot, user_token, str(interaction.user.id), expires_at_dt)
-        )
-
-class UpdateTokenModal(discord.ui.Modal, title="Cập Nhật Lại Token Mới"):
-    token_input = discord.ui.TextInput(
-        label="Discord User Token Mới",
-        placeholder="Dán token mới của bạn vào đây",
-        required=True,
-        style=discord.TextStyle.long
-    )
-
-    async def on_submit(self, interaction: discord.Interaction):
-        loading_embed = discord.Embed(
-            title="🔄 Đang Xác Thực TOKEN...",
-            description="Hệ thống đang kiểm tra TOKEN mới và đối chiếu bảo mật tài khoản...",
-            color=discord.Color.gold()
-        )
-        await interaction.response.send_message(embed=loading_embed, ephemeral=True)
-
-        new_token = self.token_input.value.strip()
-        user_id_str = str(interaction.user.id)
-        
-        async with aiohttp.ClientSession() as session:
-            headers = {"Authorization": new_token}
-            async with session.get("https://discord.com/api/v9/users/@me", headers=headers) as res:
-                if res.status != 200:
-                    err_embed = discord.Embed(title="❌ Cập Nhật Thất Bại", description="TOKEN mới không hợp lệ. Vui lòng kiểm tra lại!", color=discord.Color.red())
-                    await interaction.edit_original_response(embed=err_embed)
-                    return
-                user_data = await res.json()
-                new_discord_id = str(user_data.get("id"))
-
-        accounts_data = load_json(ACCOUNTS_FILE, {})
-        
-        old_token_found = None
-        acc_info = None
-        for tkn, info in accounts_data.items():
-            if info.get("user_id") == user_id_str:
-                old_token_found = tkn
-                acc_info = info
-                break
-        
-        if not acc_info:
-            err_embed = discord.Embed(title="❌ Lỗi", description="Bạn chưa từng kích hoạt gói auto quest nào trên hệ thống!", color=discord.Color.red())
-            await interaction.edit_original_response(embed=err_embed)
-            return
-
-        original_discord_id = acc_info.get("original_discord_id", new_discord_id)
-        if acc_info.get("original_discord_id") and new_discord_id != original_discord_id:
-            err_embed = discord.Embed(title="🛡️ Cảnh Báo Bảo Mật", description="Bạn chỉ được phép cập nhật TOKEN cho **đúng tài khoản Discord** đã kích hoạt ban đầu!", color=discord.Color.red())
-            await interaction.edit_original_response(embed=err_embed)
-            return
-
-        if "original_discord_id" not in acc_info:
-            acc_info["original_discord_id"] = new_discord_id
-
-        if old_token_found and old_token_found in accounts_data:
-            del accounts_data[old_token_found]
-            
-        accounts_data[new_token] = acc_info
-        save_json(ACCOUNTS_FILE, accounts_data)
-
-        success_embed = discord.Embed(
-            title="✅ Cập Nhật TOKEN Thành Công!",
-            description="Tài khoản của bạn đã được làm mới kết nối và tiếp tục chạy tiến trình cày quest.",
-            color=discord.Color.brand_green()
-        )
-        await interaction.edit_original_response(embed=success_embed)
-
-        if old_token_found and old_token_found in bot.running_tasks:
-            bot.running_tasks[old_token_found].cancel()
-            del bot.running_tasks[old_token_found]
-
-        expires_at_dt = datetime.fromisoformat(acc_info["expires_at"])
-        bot.running_tasks[new_token] = asyncio.create_task(
-            run_auto_quest_background(bot, new_token, user_id_str, expires_at_dt)
         )
 
 @bot.event
@@ -902,9 +842,9 @@ async def on_ready():
             continue
     print(f"[✓] Đã khôi phục thành công {count} tài khoản treo ngầm.")
 
-@bot.tree.command(name="genkey", description="Tạo key nhanh (Ví dụ: 30p, 2h, 7d, 1m)")
-@app_commands.describe(duration="Thời gian sử dụng")
-async def genkey(interaction: discord.Interaction, duration: str):
+@bot.tree.command(name="genkey", description="Tạo key hàng loạt (Ví dụ: duration: 2h, amount: 5)")
+@app_commands.describe(duration="Thời gian sử dụng (VD: 30p, 2h, 7d, 1m)", amount="Số lượng key muốn tạo (Mặc định: 1)")
+async def genkey(interaction: discord.Interaction, duration: str, amount: int = 1):
     if str(interaction.user.id) not in ADMIN_IDS:
         await interaction.response.send_message("❌ Bạn không có quyền!", ephemeral=True)
         return
@@ -914,23 +854,100 @@ async def genkey(interaction: discord.Interaction, duration: str):
         await interaction.response.send_message("❌ Sai định dạng thời gian! (VD: 2h, 7d)", ephemeral=True)
         return
 
-    new_key = f"DAWNGGX-{''.join(random.choices(string.ascii_uppercase + string.digits, k=8))}"
+    if amount < 1 or amount > 50:
+        await interaction.response.send_message("❌ Số lượng key mỗi lần tạo phải từ 1 đến 50!", ephemeral=True)
+        return
+
     keys_data = load_json(KEY_FILE, {})
-    keys_data[new_key] = {"used": False, "user_id": None, "duration_seconds": seconds, "expires_at": None}
+    created_keys = []
+
+    for _ in range(amount):
+        new_key = generate_custom_key()
+        while new_key in keys_data:
+            new_key = generate_custom_key()
+        
+        keys_data[new_key] = {"used": False, "user_id": None, "duration_seconds": seconds, "expires_at": None}
+        created_keys.append(new_key)
+
     save_json(KEY_FILE, keys_data)
 
-    embed = discord.Embed(title="🔑 Tạo Key Thành Công", color=discord.Color.blue())
-    embed.add_field(name="Mã Key:", value=f"`{new_key}`", inline=False)
+    # Hiển thị danh sách key vừa tạo (nếu nhiều quá sẽ gửi dạng danh sách code block)
+    keys_text = "\n".join([f"`{k}`" for k in created_keys])
+    if len(keys_text) > 4000: # Giới hạn ký tự của Embed Discord
+        keys_text = "Đã tạo thành công " + str(amount) + " key! (Danh sách quá dài để hiển thị hết trong khung)."
+
+    embed = discord.Embed(title=f"🔑 Tạo Thành Công {amount} Key", color=discord.Color.blue())
     embed.add_field(name="Thời hạn:", value=f"`{duration}`", inline=False)
+    embed.add_field(name="Danh sách Key:", value=keys_text, inline=False)
     await interaction.response.send_message(embed=embed, ephemeral=True)
 
-@bot.tree.command(name="active", description="Kích hoạt AUTO 0R3 bằng Key và Token")
-async def active(interaction: discord.Interaction):
-    await interaction.response.send_modal(ActiveModal())
+@bot.tree.command(name="active", description="Kiểm tra và xác thực mã Key bản quyền")
+@app_commands.describe(key="Mã Key do Admin cung cấp")
+async def active(interaction: discord.Interaction, key: str):
+    entered_key = key.strip()
+    keys_data = load_json(KEY_FILE, {})
 
-@bot.tree.command(name="updatetoken", description="Cập nhật lại token mới khi token cũ bị lỗi/hết hạn")
-async def updatetoken(interaction: discord.Interaction):
-    await interaction.response.send_modal(UpdateTokenModal())
+    if entered_key not in keys_data:
+        await interaction.response.send_message("❌ Mã key không tồn tại trong hệ thống!", ephemeral=True)
+        return
+
+    key_info = keys_data[entered_key]
+    if key_info.get("used", False) and key_info.get("user_id") != str(interaction.user.id):
+        await interaction.response.send_message("❌ Key này đã được dùng bởi người khác!", ephemeral=True)
+        return
+
+    embed = discord.Embed(
+        title="✅ Key Hợp Lệ!",
+        description=f"Key của bạn đã sẵn sàng kích hoạt. Vui lòng bấm tiếp lệnh `/account` để nhập Token tài khoản chạy ngầm.",
+        color=discord.Color.blue()
+    )
+    embed.add_field(name="Mã Key", value=f"`{entered_key}`", inline=True)
+    await interaction.response.send_message(embed=embed, ephemeral=True)
+
+@bot.tree.command(name="account", description="Nhập token tài khoản để thêm và chạy auto quest")
+@app_commands.describe(key="Nhập lại mã Key hợp lệ để liên kết với tài khoản")
+async def account(interaction: discord.Interaction, key: str):
+    entered_key = key.strip()
+    keys_data = load_json(KEY_FILE, {})
+
+    if entered_key not in keys_data:
+        await interaction.response.send_message("❌ Mã key không tồn tại! Vui lòng dùng lệnh `/active [key]` trước.", ephemeral=True)
+        return
+
+    await interaction.response.send_modal(AddAccountModal(entered_key))
+
+@bot.tree.command(name="stop", description="Dừng và hủy toàn bộ các tài khoản đang treo ngầm của bạn")
+async def stop(interaction: discord.Interaction):
+    await interaction.response.defer(ephemeral=True)
+    
+    user_id_str = str(interaction.user.id)
+    accounts_data = load_json(ACCOUNTS_FILE, {})
+    
+    tokens_to_remove = []
+    for token, acc_info in accounts_data.items():
+        if acc_info.get("user_id") == user_id_str:
+            tokens_to_remove.append(token)
+            
+    if not tokens_to_remove:
+        await interaction.followup.send("❌ Bạn hiện không có tài khoản nào đang được treo ngầm trong hệ thống!", ephemeral=True)
+        return
+        
+    for token in tokens_to_remove:
+        if token in accounts_data:
+            del accounts_data[token]
+            
+        if token in bot.running_tasks:
+            bot.running_tasks[token].cancel()
+            del bot.running_tasks[token]
+            
+    save_json(ACCOUNTS_FILE, accounts_data)
+    
+    embed = discord.Embed(
+        title="🛑 Đã Dừng Treo Thành Công",
+        description=f"Đã hủy kích hoạt và ngắt toàn bộ ({len(tokens_to_remove)}) tài khoản đang chạy ngầm của bạn.",
+        color=discord.Color.red()
+    )
+    await interaction.followup.send(embed=embed, ephemeral=True)
 
 if __name__ == "__main__":
     if not DISCORD_BOT_TOKEN or DISCORD_BOT_TOKEN == "YOUR_DISCORD_BOT_TOKEN_HERE":
@@ -940,4 +957,4 @@ if __name__ == "__main__":
         web_thread.start()
         print("[✓] Web Admin Panel (Neon Cyber) đã khởi chạy tại: http://localhost:8000")
         
-        bot.run(DISCORD_BOT_TOKEN)
+        bot.run(DISCORD_BOT_TOKEN
