@@ -961,8 +961,15 @@ async def genkey(interaction: discord.Interaction, duration: str, amount: int = 
         
     save_json(KEY_FILE, keys_data)
 
-    keys_text = "\n".join([f"`{k}`" for k in generated_keys])
-    embed = discord.Embed(title=f"🔑 Tạo Thành Công {amount} Key", description=keys_text, color=discord.Color.blue())
+    # Gom tất cả các key vào code block kèm nút Copy của Discord
+    keys_text = "\n".join(generated_keys)
+    code_block = f"```\n{keys_text}\n```"
+
+    embed = discord.Embed(
+        title=f"🔑 Tạo Thành Công {amount} Key", 
+        description=code_block, 
+        color=discord.Color.blue()
+    )
     embed.add_field(name="Thời hạn:", value=f"`{duration}`", inline=False)
     await interaction.response.send_message(embed=embed, ephemeral=True)
 
