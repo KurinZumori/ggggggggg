@@ -303,7 +303,7 @@ LOGIN_HTML = """
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        body {
+        body {{
             background-color: #05050a;
             color: #e0e0e0;
             font-family: 'Rajdhani', sans-serif;
@@ -313,8 +313,8 @@ LOGIN_HTML = """
             justify-content: center;
             overflow: hidden;
             position: relative;
-        }
-        body::before {
+        }}
+        body::before {{
             content: " ";
             display: block;
             position: absolute;
@@ -323,10 +323,10 @@ LOGIN_HTML = """
             z-index: -1;
             background-size: 100% 4px, 6px 100%;
             pointer-events: none;
-        }
-        .font-orbitron { font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
-        .neon-title { color: #00f3ff; text-shadow: 0 0 10px rgba(0, 243, 255, 0.6), 0 0 20px rgba(0, 243, 255, 0.3); }
-        .glass-card {
+        }}
+        .font-orbitron {{ font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }}
+        .neon-title {{ color: #00f3ff; text-shadow: 0 0 10px rgba(0, 243, 255, 0.6), 0 0 20px rgba(0, 243, 255, 0.3); }}
+        .glass-card {{
             background: rgba(15, 15, 25, 0.85);
             backdrop-filter: blur(15px);
             border: 1px solid rgba(0, 243, 255, 0.3);
@@ -335,22 +335,22 @@ LOGIN_HTML = """
             width: 100%;
             max-width: 420px;
             padding: 40px;
-        }
-        .form-control {
+        }}
+        .form-control {{
             background: rgba(10, 10, 18, 0.9);
             border: 1px solid rgba(0, 243, 255, 0.3);
             color: #fff;
             border-radius: 8px;
             padding: 12px;
             transition: all 0.3s;
-        }
-        .form-control:focus {
+        }}
+        .form-control:focus {{
             background: rgba(15, 15, 25, 1);
             color: #fff;
             border-color: #00f3ff;
             box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
-        }
-        .btn-neon {
+        }}
+        .btn-neon {{
             background: transparent;
             color: #00f3ff;
             border: 1px solid #00f3ff;
@@ -361,20 +361,20 @@ LOGIN_HTML = """
             width: 100%;
             transition: all 0.3s ease;
             box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
-        }
-        .btn-neon:hover {
+        }}
+        .btn-neon:hover {{
             background: #00f3ff;
             color: #05050a;
             box-shadow: 0 0 25px rgba(0, 243, 255, 0.8);
             transform: scale(1.02);
-        }
-        .error-msg {
+        }}
+        .error-msg {{
             color: #ff0055;
             font-size: 0.9rem;
             text-align: center;
             margin-top: 15px;
             text-shadow: 0 0 8px rgba(255, 0, 85, 0.4);
-        }
+        }}
     </style>
 </head>
 <body>
@@ -716,9 +716,8 @@ async def web_create_key(duration: str = Form(...), amount: int = Form(1), auth:
     seconds = parse_duration(duration)
     if seconds > 0 and amount > 0:
         keys_data = load_json(KEY_FILE, {})
-        for _ in range(min(amount, 100)): # Giới hạn tối đa 100 key mỗi lần tạo qua web để tránh treo
+        for _ in range(min(amount, 100)):
             new_key = generate_custom_key()
-            # Đảm bảo không bị trùng lặp key ngẫu nhiên
             while new_key in keys_data:
                 new_key = generate_custom_key()
             keys_data[new_key] = {"used": False, "user_id": None, "duration_seconds": seconds, "expires_at": None}
@@ -842,16 +841,28 @@ async def on_ready():
             continue
     print(f"[✓] Đã khôi phục thành công {count} tài khoản treo ngầm.")
 
-@bot.tree.command(name="genkey", description="Tạo key hàng loạt (Ví dụ: duration: 2h, amount: 5)")
-@app_commands.describe(duration="Thời gian sử dụng (VD: 30p, 2h, 7d, 1m)", amount="Số lượng key muốn tạo (Mặc định: 1)")
-async def genkey(interaction: discord.Interaction, duration: str, amount: int = 1):
+@bot.tree.command(name="genkey", description="Tạo key hàng loạt (Ví dụ: 2h 5)")
+@app_commands.describe(time_and_amount="Nhập thời gian và số lượng, cách nhau bằng dấu cách (VD: 2h 5 hoặc 7d 10)")
+async def genkey(interaction: discord.Interaction, time_and_amount: str):
     if str(interaction.user.id) not in ADMIN_IDS:
         await interaction.response.send_message("❌ Bạn không có quyền!", ephemeral=True)
         return
 
-    seconds = parse_duration(duration)
+    parts = time_and_amount.strip().split()
+    if len(parts) < 2:
+        await interaction.response.send_message("❌ Sai cú pháp! Vui lòng nhập theo định dạng: `/genkey 2h 5` (Thời gian và số lượng)", ephemeral=True)
+        return
+
+    duration_str = parts[0]
+    try:
+        amount = int(parts[1])
+    except ValueError:
+        await interaction.response.send_message("❌ Số lượng không hợp lệ! Ví dụ đúng: `/genkey 2h 5`", ephemeral=True)
+        return
+
+    seconds = parse_duration(duration_str)
     if seconds <= 0:
-        await interaction.response.send_message("❌ Sai định dạng thời gian! (VD: 2h, 7d)", ephemeral=True)
+        await interaction.response.send_message("❌ Sai định dạng thời gian! (VD: 2h, 7d, 30p)", ephemeral=True)
         return
 
     if amount < 1 or amount > 50:
@@ -871,13 +882,12 @@ async def genkey(interaction: discord.Interaction, duration: str, amount: int = 
 
     save_json(KEY_FILE, keys_data)
 
-    # Hiển thị danh sách key vừa tạo (nếu nhiều quá sẽ gửi dạng danh sách code block)
     keys_text = "\n".join([f"`{k}`" for k in created_keys])
-    if len(keys_text) > 4000: # Giới hạn ký tự của Embed Discord
+    if len(keys_text) > 4000:
         keys_text = "Đã tạo thành công " + str(amount) + " key! (Danh sách quá dài để hiển thị hết trong khung)."
 
     embed = discord.Embed(title=f"🔑 Tạo Thành Công {amount} Key", color=discord.Color.blue())
-    embed.add_field(name="Thời hạn:", value=f"`{duration}`", inline=False)
+    embed.add_field(name="Thời hạn:", value=f"`{duration_str}`", inline=False)
     embed.add_field(name="Danh sách Key:", value=keys_text, inline=False)
     await interaction.response.send_message(embed=embed, ephemeral=True)
 
