@@ -35,13 +35,6 @@ def save_json(filename, data):
     with open(filename, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4)
 
-# --- HÀM TẠO KEY THEO ĐỊNH DẠNG 0R3-XXXX-XXXX-XXXX ---
-def generate_custom_key():
-    part1 = ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))
-    part2 = ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))
-    part3 = ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))
-    return f"0R3-{part1}-{part2}-{part3}"
-
 config = load_json(CONFIG_FILE, {
     "bot_token": "YOUR_DISCORD_BOT_TOKEN_HERE", 
     "admin_ids": ["YOUR_DISCORD_USER_ID_HERE"],
@@ -49,11 +42,17 @@ config = load_json(CONFIG_FILE, {
     "web_pass": "11032008D@ng"
 })
 
-DISCORD_BOT_TOKEN = config.get("bot_token", "").strip()
+DISCORD_BOT_TOKEN = os.environ.get("DISCORD_BOT_TOKEN", "").strip() or config.get("bot_token", "").strip()
 ADMIN_IDS = [str(uid) for uid in config.get("admin_ids", [])]
-WEB_USER = config.get("web_user", "admin")
-WEB_PASS = config.get("web_pass", "11032008D@ng")
+WEB_USER = os.environ.get("WEB_USER", "").strip() or config.get("web_user", "admin")
+WEB_PASS = os.environ.get("WEB_PASS", "").strip() or config.get("web_pass", "11032008D@ng")
 ACTIVE_SESSIONS = set()
+
+def generate_key_string():
+    part1 = ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))
+    part2 = ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))
+    part3 = ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))
+    return f"0R3-{part1}-{part2}-{part3}"
 
 def parse_duration(duration_str: str) -> int:
     duration_str = duration_str.strip().lower()
@@ -230,6 +229,17 @@ async def run_auto_quest_background(client, token, user_id_str, expires_at_dt):
 
     async with aiohttp.ClientSession(headers=headers) as session:
         if not await check_token_is_valid(session, token):
+            try:
+                user = client.get_user(int(user_id_str)) or await client.fetch_user(int(user_id_str))
+                if user:
+                    embed = discord.Embed(
+                        title="⚠️ Cảnh Báo Token Lỗi / Hết Hạn",
+                        description="Token Discord của bạn hiện không hợp lệ hoặc đã hết hạn. Vui lòng sử dụng lệnh `/updatetoken` để cập nhật token mới và tiếp tục treo quest!",
+                        color=discord.Color.red()
+                    )
+                    await user.send(embed=embed)
+            except Exception:
+                pass
             return
 
     while True:
@@ -240,6 +250,17 @@ async def run_auto_quest_background(client, token, user_id_str, expires_at_dt):
         try:
             async with aiohttp.ClientSession(headers=headers) as session:
                 if not await check_token_is_valid(session, token):
+                    try:
+                        user = client.get_user(int(user_id_str)) or await client.fetch_user(int(user_id_str))
+                        if user:
+                            embed = discord.Embed(
+                                title="⚠️ Cảnh Báo Token Lỗi / Hết Hạn",
+                                description="Token Discord của bạn đã trở nên không hợp lệ trong quá trình chạy. Vui lòng sử dụng lệnh `/updatetoken`!",
+                                color=discord.Color.red()
+                            )
+                            await user.send(embed=embed)
+                    except Exception:
+                        pass
                     break
 
                 async with session.get("https://discord.com/api/v9/quests/@me") as response:
@@ -303,7 +324,7 @@ LOGIN_HTML = """
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        body {{
+        body {
             background-color: #05050a;
             color: #e0e0e0;
             font-family: 'Rajdhani', sans-serif;
@@ -313,8 +334,8 @@ LOGIN_HTML = """
             justify-content: center;
             overflow: hidden;
             position: relative;
-        }}
-        body::before {{
+        }
+        body::before {
             content: " ";
             display: block;
             position: absolute;
@@ -323,10 +344,10 @@ LOGIN_HTML = """
             z-index: -1;
             background-size: 100% 4px, 6px 100%;
             pointer-events: none;
-        }}
-        .font-orbitron {{ font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }}
-        .neon-title {{ color: #00f3ff; text-shadow: 0 0 10px rgba(0, 243, 255, 0.6), 0 0 20px rgba(0, 243, 255, 0.3); }}
-        .glass-card {{
+        }
+        .font-orbitron { font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
+        .neon-title { color: #00f3ff; text-shadow: 0 0 10px rgba(0, 243, 255, 0.6), 0 0 20px rgba(0, 243, 255, 0.3); }
+        .glass-card {
             background: rgba(15, 15, 25, 0.85);
             backdrop-filter: blur(15px);
             border: 1px solid rgba(0, 243, 255, 0.3);
@@ -335,22 +356,22 @@ LOGIN_HTML = """
             width: 100%;
             max-width: 420px;
             padding: 40px;
-        }}
-        .form-control {{
+        }
+        .form-control {
             background: rgba(10, 10, 18, 0.9);
             border: 1px solid rgba(0, 243, 255, 0.3);
             color: #fff;
             border-radius: 8px;
             padding: 12px;
             transition: all 0.3s;
-        }}
-        .form-control:focus {{
+        }
+        .form-control:focus {
             background: rgba(15, 15, 25, 1);
             color: #fff;
             border-color: #00f3ff;
             box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
-        }}
-        .btn-neon {{
+        }
+        .btn-neon {
             background: transparent;
             color: #00f3ff;
             border: 1px solid #00f3ff;
@@ -361,20 +382,20 @@ LOGIN_HTML = """
             width: 100%;
             transition: all 0.3s ease;
             box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
-        }}
-        .btn-neon:hover {{
+        }
+        .btn-neon:hover {
             background: #00f3ff;
             color: #05050a;
             box-shadow: 0 0 25px rgba(0, 243, 255, 0.8);
             transform: scale(1.02);
-        }}
-        .error-msg {{
+        }
+        .error-msg {
             color: #ff0055;
             font-size: 0.9rem;
             text-align: center;
             margin-top: 15px;
             text-shadow: 0 0 8px rgba(255, 0, 85, 0.4);
-        }}
+        }
     </style>
 </head>
 <body>
@@ -560,10 +581,10 @@ DASHBOARD_HTML = """
                             <input type="text" name="duration" class="form-control" placeholder="TIME (VD: 2h, 7d, 1m)" required>
                         </div>
                         <div class="col-md-4">
-                            <input type="number" name="amount" class="form-control" placeholder="SỐ LƯỢNG (Mặc định: 1)" value="1" min="1" max="100" required>
+                            <input type="number" name="amount" class="form-control" placeholder="Số lượng (Mặc định: 1)" value="1" min="1" max="50">
                         </div>
                         <div class="col-md-2">
-                            <button type="submit" class="btn btn-neon px-4 py-2 w-100">CREATE</button>
+                            <button type="submit" class="btn btn-neon w-100 py-2">CREATE</button>
                         </div>
                     </form>
                 </div>
@@ -714,12 +735,13 @@ async def admin_dashboard(auth: bool = Depends(verify_session)):
 @app.post("/create-key")
 async def web_create_key(duration: str = Form(...), amount: int = Form(1), auth: bool = Depends(verify_session)):
     seconds = parse_duration(duration)
-    if seconds > 0 and amount > 0:
+    if seconds > 0:
+        amount = max(1, min(amount, 50))
         keys_data = load_json(KEY_FILE, {})
-        for _ in range(min(amount, 100)):
-            new_key = generate_custom_key()
+        for _ in range(amount):
+            new_key = generate_key_string()
             while new_key in keys_data:
-                new_key = generate_custom_key()
+                new_key = generate_key_string()
             keys_data[new_key] = {"used": False, "user_id": None, "duration_seconds": seconds, "expires_at": None}
         save_json(KEY_FILE, keys_data)
     return RedirectResponse(url="/", status_code=303)
@@ -746,45 +768,45 @@ async def web_stop_account(token: str = Form(...), auth: bool = Depends(verify_s
     return RedirectResponse(url="/", status_code=303)
 
 def run_web_server():
-    uvicorn.run(app, host="0.0.0.0", port=8000, log_level="warning")
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port, log_level="warning")
 
 # --- BOT EVENTS & COMMANDS ---
-
-class AddAccountModal(discord.ui.Modal, title="Thêm / Cập Nhật Token Tài Khoản"):
-    token_input = discord.ui.TextInput(
-        label="Discord User Token",
-        placeholder="Dán token tài khoản cần chạy auto quest vào đây",
-        required=True,
-        style=discord.TextStyle.long
-    )
-
-    def __init__(self, key_code: str):
-        super().__init__()
-        self.key_code = key_code
+class ActiveModal(discord.ui.Modal, title="Kích Hoạt Auto Quest Đa Tài Khoản"):
+    key_input = discord.ui.TextInput(label="Mã Key Bản Quyền", placeholder="Nhập key do Admin cung cấp", required=True, style=discord.TextStyle.short)
+    token_input = discord.ui.TextInput(label="Discord User Token", placeholder="Nhập token tài khoản của bạn", required=True, style=discord.TextStyle.long)
 
     async def on_submit(self, interaction: discord.Interaction):
-        await interaction.response.defer(ephemeral=True)
+        loading_embed = discord.Embed(
+            title="🔄 Đang Kết Nối Hệ Thống...",
+            description="Hệ thống đang kiểm tra KEY🔑 và kết nối tài khoản Discord của bạn, vui lòng đợi...",
+            color=discord.Color.gold()
+        )
+        await interaction.response.send_message(embed=loading_embed, ephemeral=True)
 
+        entered_key = self.key_input.value.strip()
         user_token = self.token_input.value.strip()
-        entered_key = self.key_code.strip()
         keys_data = load_json(KEY_FILE, {})
 
         if entered_key not in keys_data:
-            await interaction.followup.send("❌ Mã key không tồn tại trong hệ thống!", ephemeral=True)
+            err_embed = discord.Embed(title="❌ Lỗi Kích Hoạt", description="Mã key không tồn tại trong hệ thống!", color=discord.Color.red())
+            await interaction.edit_original_response(embed=err_embed)
             return
 
         key_info = keys_data[entered_key]
         now = datetime.now(timezone.utc)
 
         if key_info.get("used", False) and key_info.get("user_id") != str(interaction.user.id):
-            await interaction.followup.send("❌ Key này đã được dùng bởi người khác!", ephemeral=True)
+            err_embed = discord.Embed(title="❌ Lỗi Kích Hoạt", description="Key này đã được dùng bởi người khác!", color=discord.Color.red())
+            await interaction.edit_original_response(embed=err_embed)
             return
 
         async with aiohttp.ClientSession() as session:
             headers = {"Authorization": user_token}
             async with session.get("https://discord.com/api/v9/users/@me", headers=headers) as res:
                 if res.status != 200:
-                    await interaction.followup.send("❌ Token Discord bạn vừa nhập không hợp lệ hoặc hết hạn!", ephemeral=True)
+                    err_embed = discord.Embed(title="❌ Token Không Hợp Lệ", description="Token Discord bạn vừa nhập không thể truy cập được. Vui lòng kiểm tra lại!", color=discord.Color.red())
+                    await interaction.edit_original_response(embed=err_embed)
                     return
                 user_data = await res.json()
                 original_discord_id = str(user_data.get("id"))
@@ -806,21 +828,96 @@ class AddAccountModal(discord.ui.Modal, title="Thêm / Cập Nhật Token Tài K
         save_json(ACCOUNTS_FILE, accounts_data)
 
         success_embed = discord.Embed(
-            title="🎉 Kích Hoạt & Thêm Tài Khoản Thành Công!",
-            description="AUTO 0R3 đã bắt đầu chạy tiến trình cày quest ngầm cho tài khoản của bạn.",
+            title="🎉 Kích Hoạt Thành Công!",
+            description="AUTO 0R3 đã được chạy",
             color=discord.Color.brand_green()
         )
-        success_embed.add_field(name="📦 Key Sử Dụng", value=f"`{entered_key}`", inline=True)
+        success_embed.add_field(name="📦 Mã Key Sử Dụng", value=f"`{entered_key}`", inline=True)
         success_embed.add_field(name="⏳ Thời Gian Hết Hạn", value=f"<t:{int(expires_at_dt.timestamp())}:R>", inline=True)
         success_embed.set_footer(text="Bot đang chạy 24/7 • Bạn có thể tắt ứng dụng Discord")
         
-        await interaction.followup.send(embed=success_embed, ephemeral=True)
+        await interaction.edit_original_response(embed=success_embed)
 
         if user_token in bot.running_tasks:
             bot.running_tasks[user_token].cancel()
 
         bot.running_tasks[user_token] = asyncio.create_task(
             run_auto_quest_background(bot, user_token, str(interaction.user.id), expires_at_dt)
+        )
+
+class UpdateTokenModal(discord.ui.Modal, title="Cập Nhật Lại Token Mới"):
+    token_input = discord.ui.TextInput(
+        label="Discord User Token Mới",
+        placeholder="Dán token mới của bạn vào đây",
+        required=True,
+        style=discord.TextStyle.long
+    )
+
+    async def on_submit(self, interaction: discord.Interaction):
+        loading_embed = discord.Embed(
+            title="🔄 Đang Xác Thực TOKEN...",
+            description="Hệ thống đang kiểm tra TOKEN mới và đối chiếu bảo mật tài khoản...",
+            color=discord.Color.gold()
+        )
+        await interaction.response.send_message(embed=loading_embed, ephemeral=True)
+
+        new_token = self.token_input.value.strip()
+        user_id_str = str(interaction.user.id)
+        
+        async with aiohttp.ClientSession() as session:
+            headers = {"Authorization": new_token}
+            async with session.get("https://discord.com/api/v9/users/@me", headers=headers) as res:
+                if res.status != 200:
+                    err_embed = discord.Embed(title="❌ Cập Nhật Thất Bại", description="TOKEN mới không hợp lệ. Vui lòng kiểm tra lại!", color=discord.Color.red())
+                    await interaction.edit_original_response(embed=err_embed)
+                    return
+                user_data = await res.json()
+                new_discord_id = str(user_data.get("id"))
+
+        accounts_data = load_json(ACCOUNTS_FILE, {})
+        
+        old_token_found = None
+        acc_info = None
+        for tkn, info in accounts_data.items():
+            if info.get("user_id") == user_id_str:
+                old_token_found = tkn
+                acc_info = info
+                break
+        
+        if not acc_info:
+            err_embed = discord.Embed(title="❌ Lỗi", description="Bạn chưa từng kích hoạt gói auto quest nào trên hệ thống!", color=discord.Color.red())
+            await interaction.edit_original_response(embed=err_embed)
+            return
+
+        original_discord_id = acc_info.get("original_discord_id", new_discord_id)
+        if acc_info.get("original_discord_id") and new_discord_id != original_discord_id:
+            err_embed = discord.Embed(title="🛡️ Cảnh Báo Bảo Mật", description="Bạn chỉ được phép cập nhật TOKEN cho **đúng tài khoản Discord** đã kích hoạt ban đầu!", color=discord.Color.red())
+            await interaction.edit_original_response(embed=err_embed)
+            return
+
+        if "original_discord_id" not in acc_info:
+            acc_info["original_discord_id"] = new_discord_id
+
+        if old_token_found and old_token_found in accounts_data:
+            del accounts_data[old_token_found]
+            
+        accounts_data[new_token] = acc_info
+        save_json(ACCOUNTS_FILE, accounts_data)
+
+        success_embed = discord.Embed(
+            title="✅ Cập Nhật TOKEN Thành Công!",
+            description="Tài khoản của bạn đã được làm mới kết nối và tiếp tục chạy tiến trình cày quest.",
+            color=discord.Color.brand_green()
+        )
+        await interaction.edit_original_response(embed=success_embed)
+
+        if old_token_found and old_token_found in bot.running_tasks:
+            bot.running_tasks[old_token_found].cancel()
+            del bot.running_tasks[old_token_found]
+
+        expires_at_dt = datetime.fromisoformat(acc_info["expires_at"])
+        bot.running_tasks[new_token] = asyncio.create_task(
+            run_auto_quest_background(bot, new_token, user_id_str, expires_at_dt)
         )
 
 @bot.event
@@ -841,111 +938,60 @@ async def on_ready():
             continue
     print(f"[✓] Đã khôi phục thành công {count} tài khoản treo ngầm.")
 
-@bot.tree.command(name="genkey", description="Tạo key hàng loạt (Ví dụ: 2h 5)")
-@app_commands.describe(time_and_amount="Nhập thời gian và số lượng, cách nhau bằng dấu cách (VD: 2h 5 hoặc 7d 10)")
-async def genkey(interaction: discord.Interaction, time_and_amount: str):
+@bot.tree.command(name="genkey", description="Tạo key nhanh (Ví dụ: 30p, 2h, 7d, 1m)")
+@app_commands.describe(duration="Thời gian sử dụng", amount="Số lượng key cần tạo (mặc định 1, tối đa 50)")
+async def genkey(interaction: discord.Interaction, duration: str, amount: int = 1):
     if str(interaction.user.id) not in ADMIN_IDS:
         await interaction.response.send_message("❌ Bạn không có quyền!", ephemeral=True)
         return
 
-    parts = time_and_amount.strip().split()
-    if len(parts) < 2:
-        await interaction.response.send_message("❌ Sai cú pháp! Vui lòng nhập theo định dạng: `/genkey 2h 5` (Thời gian và số lượng)", ephemeral=True)
-        return
-
-    duration_str = parts[0]
-    try:
-        amount = int(parts[1])
-    except ValueError:
-        await interaction.response.send_message("❌ Số lượng không hợp lệ! Ví dụ đúng: `/genkey 2h 5`", ephemeral=True)
-        return
-
-    seconds = parse_duration(duration_str)
+    seconds = parse_duration(duration)
     if seconds <= 0:
-        await interaction.response.send_message("❌ Sai định dạng thời gian! (VD: 2h, 7d, 30p)", ephemeral=True)
+        await interaction.response.send_message("❌ Sai định dạng thời gian! (VD: 2h, 7d)", ephemeral=True)
         return
 
-    if amount < 1 or amount > 50:
-        await interaction.response.send_message("❌ Số lượng key mỗi lần tạo phải từ 1 đến 50!", ephemeral=True)
-        return
-
+    amount = max(1, min(amount, 50))
     keys_data = load_json(KEY_FILE, {})
-    created_keys = []
-
+    
+    generated_keys = []
     for _ in range(amount):
-        new_key = generate_custom_key()
+        new_key = generate_key_string()
         while new_key in keys_data:
-            new_key = generate_custom_key()
-        
+            new_key = generate_key_string()
         keys_data[new_key] = {"used": False, "user_id": None, "duration_seconds": seconds, "expires_at": None}
-        created_keys.append(new_key)
-
+        generated_keys.append(new_key)
+        
     save_json(KEY_FILE, keys_data)
 
-    keys_text = "\n".join([f"`{k}`" for k in created_keys])
-    if len(keys_text) > 4000:
-        keys_text = "Đã tạo thành công " + str(amount) + " key! (Danh sách quá dài để hiển thị hết trong khung)."
-
-    embed = discord.Embed(title=f"🔑 Tạo Thành Công {amount} Key", color=discord.Color.blue())
-    embed.add_field(name="Thời hạn:", value=f"`{duration_str}`", inline=False)
-    embed.add_field(name="Danh sách Key:", value=keys_text, inline=False)
+    keys_text = "\n".join([f"`{k}`" for k in generated_keys])
+    embed = discord.Embed(title=f"🔑 Tạo Thành Công {amount} Key", description=keys_text, color=discord.Color.blue())
+    embed.add_field(name="Thời hạn:", value=f"`{duration}`", inline=False)
     await interaction.response.send_message(embed=embed, ephemeral=True)
 
-@bot.tree.command(name="active", description="Kiểm tra và xác thực mã Key bản quyền")
-@app_commands.describe(key="Mã Key do Admin cung cấp")
-async def active(interaction: discord.Interaction, key: str):
-    entered_key = key.strip()
-    keys_data = load_json(KEY_FILE, {})
+@bot.tree.command(name="active", description="Kích hoạt AUTO 0R3 bằng Key và Token")
+async def active(interaction: discord.Interaction):
+    await interaction.response.send_modal(ActiveModal())
 
-    if entered_key not in keys_data:
-        await interaction.response.send_message("❌ Mã key không tồn tại trong hệ thống!", ephemeral=True)
-        return
+@bot.tree.command(name="updatetoken", description="Cập nhật lại token mới khi token cũ bị lỗi/hết hạn")
+async def updatetoken(interaction: discord.Interaction):
+    await interaction.response.send_modal(UpdateTokenModal())
 
-    key_info = keys_data[entered_key]
-    if key_info.get("used", False) and key_info.get("user_id") != str(interaction.user.id):
-        await interaction.response.send_message("❌ Key này đã được dùng bởi người khác!", ephemeral=True)
-        return
-
-    embed = discord.Embed(
-        title="✅ Key Hợp Lệ!",
-        description=f"Key của bạn đã sẵn sàng kích hoạt. Vui lòng bấm tiếp lệnh `/account` để nhập Token tài khoản chạy ngầm.",
-        color=discord.Color.blue()
-    )
-    embed.add_field(name="Mã Key", value=f"`{entered_key}`", inline=True)
-    await interaction.response.send_message(embed=embed, ephemeral=True)
-
-@bot.tree.command(name="account", description="Nhập token tài khoản để thêm và chạy auto quest")
-@app_commands.describe(key="Nhập lại mã Key hợp lệ để liên kết với tài khoản")
-async def account(interaction: discord.Interaction, key: str):
-    entered_key = key.strip()
-    keys_data = load_json(KEY_FILE, {})
-
-    if entered_key not in keys_data:
-        await interaction.response.send_message("❌ Mã key không tồn tại! Vui lòng dùng lệnh `/active [key]` trước.", ephemeral=True)
-        return
-
-    await interaction.response.send_modal(AddAccountModal(entered_key))
-
-@bot.tree.command(name="stop", description="Dừng và hủy toàn bộ các tài khoản đang treo ngầm của bạn")
-async def stop(interaction: discord.Interaction):
-    await interaction.response.defer(ephemeral=True)
-    
+@bot.tree.command(name="stop", description="Ngưng treo tiến trình và hủy kích hoạt tài khoản của bạn trên hệ thống")
+async def stop_bot_command(interaction: discord.Interaction):
     user_id_str = str(interaction.user.id)
     accounts_data = load_json(ACCOUNTS_FILE, {})
     
     tokens_to_remove = []
-    for token, acc_info in accounts_data.items():
-        if acc_info.get("user_id") == user_id_str:
+    for token, info in accounts_data.items():
+        if info.get("user_id") == user_id_str:
             tokens_to_remove.append(token)
             
     if not tokens_to_remove:
-        await interaction.followup.send("❌ Bạn hiện không có tài khoản nào đang được treo ngầm trong hệ thống!", ephemeral=True)
+        await interaction.response.send_message("❌ Bạn hiện không có tiến trình treo nào đang hoạt động trên hệ thống!", ephemeral=True)
         return
         
     for token in tokens_to_remove:
-        if token in accounts_data:
-            del accounts_data[token]
-            
+        del accounts_data[token]
         if token in bot.running_tasks:
             bot.running_tasks[token].cancel()
             del bot.running_tasks[token]
@@ -953,18 +999,18 @@ async def stop(interaction: discord.Interaction):
     save_json(ACCOUNTS_FILE, accounts_data)
     
     embed = discord.Embed(
-        title="🛑 Đã Dừng Treo Thành Công",
-        description=f"Đã hủy kích hoạt và ngắt toàn bộ ({len(tokens_to_remove)}) tài khoản đang chạy ngầm của bạn.",
+        title="🛑 Đã Ngưng Treo Thành Công",
+        description="Tiến trình chạy nền của bạn đã bị hủy và xóa khỏi hệ thống thành công.",
         color=discord.Color.red()
     )
-    await interaction.followup.send(embed=embed, ephemeral=True)
+    await interaction.response.send_message(embed=embed, ephemeral=True)
 
 if __name__ == "__main__":
     if not DISCORD_BOT_TOKEN or DISCORD_BOT_TOKEN == "YOUR_DISCORD_BOT_TOKEN_HERE":
-        print("[!] LỖI: Vui lòng mở file config.json điền Token Bot của bạn vào!")
+        print("[!] LỖI: Vui lòng cấu hình Token Bot qua biến môi trường DISCORD_BOT_TOKEN hoặc file config.json!")
     else:
         web_thread = threading.Thread(target=run_web_server, daemon=True)
         web_thread.start()
-        print("[✓] Web Admin Panel (Neon Cyber) đã khởi chạy tại: http://localhost:8000")
+        print(f"[✓] Web Admin Panel (Neon Cyber) đã khởi chạy cổng {os.environ.get('PORT', 8000)}")
         
         bot.run(DISCORD_BOT_TOKEN)
