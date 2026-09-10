@@ -957,4 +957,4 @@ if __name__ == "__main__":
         web_thread.start()
         print("[✓] Web Admin Panel (Neon Cyber) đã khởi chạy tại: http://localhost:8000")
         
-        bot.run(DISCORD_BOT_TOKEN
+        bot.run(DISCORD_BOT_TOKEN)
